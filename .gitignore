@@ -1,0 +1,9 @@
+*~
+eln-cache/
+elpa/
+elpaca/
+bookmarks
+org-roam.db
+projectile-bookmarks.eld
+recentf
+eshell/history
