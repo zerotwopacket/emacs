@@ -20,7 +20,7 @@
 (load-theme 'modus-vivendi t)
 (setq visible-bell 1);
 
-(set-frame-font "Mononoki Nerd Font Mono 12" nil t)
+(set-frame-font "MesloLGS Nerd Font Mono 12" nil t)
 
 (require 'general)
 (use-package general
