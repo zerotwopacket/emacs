@@ -6,7 +6,6 @@
 
 * INSTALL REQUIRED PACKAGES
 
-** TODO Elpaca Manager
 
 ** Intall Packages
 
@@ -42,7 +41,7 @@
   (load-theme 'modus-vivendi t)
   (setq visible-bell 1);
 
-  (set-frame-font "Mononoki Nerd Font Mono 12" nil t)
+  (set-frame-font "MesloLGS Nerd Font Mono 12" nil t)
   
 #+end_src
 
@@ -164,3 +163,5 @@
   (use-package magit)
 
 #+end_src
+
+** TODO Elpaca Manager
