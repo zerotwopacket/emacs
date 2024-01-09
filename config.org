@@ -4,49 +4,91 @@
 #+STARTUP: showeverything
 #+OPTIONS: toc:2
 
-* INSTALL REQUIRED PACKAGES
+* TABLE OF CONTENTS :toc:
+- [[#intall-packages][Intall Packages]]
+- [[#settings][Settings]]
+- [[#evil][Evil]]
+- [[#theme][Theme]]
+- [[#general-keybindings][General Keybindings]]
+- [[#ivy-counsel-swipe-ivy-rich][Ivy, Counsel, Swipe, Ivy-rich]]
+- [[#org-bullets][Org-bullets]]
+- [[#projectile][Projectile]]
+- [[#which-key][Which-Key]]
+- [[#magit][Magit]]
+- [[#toc][TOC]]
+- [[#elpaca-manager][Elpaca Manager]]
 
-
-** Intall Packages
+* Intall Packages
 
 #+begin_src emacs-lisp
 
-        (require 'package)
-        (add-to-list 'package-archives
-                     '("melpa" . "https://melpa.org/packages/"))
+    (require 'package)
+    (add-to-list 'package-archives
+                    '("melpa" . "https://melpa.org/packages/"))
 
-        (setq package-list
-              '(evil general ivy counsel ivy-rich
-                org-bullets projectile which-key
-                magit))
+    (setq package-list
+            '(evil general ivy counsel ivy-rich
+            org-bullets projectile which-key
+            magit))
 
-        (dolist (package package-list)
-          (unless (package-installed-p package)
-          (package-install package)))
+    (dolist (package package-list)
+        (unless (package-installed-p package)
+        (package-install package)))
 
 #+end_src
 
-
-** Starters
-
+* Settings
 
 #+begin_src emacs-lisp
 
-  ;; Enable Evil
-  (require 'evil)
-  (evil-mode 1)
-
   (column-number-mode)
   (global-display-line-numbers-mode 1)
-  (load-theme 'modus-vivendi t)
   (setq visible-bell 1);
 
   (set-frame-font "MesloLGS Nerd Font Mono 12" nil t)
   
 #+end_src
 
+* Evil
 
-** General Keybindings
+#+begin_src emacs-lisp
+
+  (use-package evil
+   :ensure t
+   :init
+   (setq evil-want-keybinding nil
+       evil-vsplit-window-right t
+       evil-vsplit-window-below t
+       evil-undo-system 'undo-redo)
+       (evil-mode))
+
+  (use-package evil-collection
+      :ensure t
+      :after evil
+      :config
+      (add-to-list 'evil-collection-mode-list 'help)
+      (evil-collection-init))
+
+#+end_src
+
+* Theme
+
+#+begin_src emacs-lisp
+
+  ;;(load-theme 'modus-vivendi t)
+    ;;(use-package nordic-night-theme
+    ;;    :ensure t
+    ;;    :config
+    ;;    (load-theme 'nordic-night t))
+
+    (use-package nord-theme
+        :ensure t
+        :config
+        (load-theme 'nord t))
+
+#+end_src
+
+* General Keybindings
 
 #+begin_src emacs-lisp
 
@@ -98,7 +140,7 @@
   )
 #+end_src
 
-** Ivy, Counsel, Swipe, Ivy-rich
+* Ivy, Counsel, Swipe, Ivy-rich
 
 #+begin_src emacs-lisp
 
@@ -112,7 +154,7 @@
 
 #+end_src
 
-** Org-bullets
+* Org-bullets
 
 #+begin_src emacs-lisp
 
@@ -122,7 +164,7 @@
 
 #+end_src
 
-** Projectile
+* Projectile
 
 #+begin_src emacs-lisp
 
@@ -132,7 +174,7 @@
 
 #+end_src
 
-** Which-Key
+* Which-Key
 
 #+begin_src emacs-lisp
 (use-package which-key
@@ -156,7 +198,7 @@
 
 #+end_src
 
-** Magit
+* Magit
 
 #+begin_src emacs-lisp
 
@@ -164,4 +206,14 @@
 
 #+end_src
 
-** TODO Elpaca Manager
+* TOC
+
+#+begin_src emacs-lisp
+
+  (use-package toc-org
+  :ensure t
+  :commands toc-org-enable
+  :init (add-hook 'org-mode-hook 'toc-org-enable))
+
+#+end_src
+* TODO Elpaca Manager

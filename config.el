@@ -1,26 +1,48 @@
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+                '("melpa" . "https://melpa.org/packages/"))
 
 (setq package-list
-      '(evil general ivy counsel ivy-rich
+        '(evil general ivy counsel ivy-rich
         org-bullets projectile which-key
         magit))
 
 (dolist (package package-list)
-  (unless (package-installed-p package)
-  (package-install package)))
-
-;; Enable Evil
-(require 'evil)
-(evil-mode 1)
+    (unless (package-installed-p package)
+    (package-install package)))
 
 (column-number-mode)
 (global-display-line-numbers-mode 1)
-(load-theme 'modus-vivendi t)
 (setq visible-bell 1);
 
 (set-frame-font "MesloLGS Nerd Font Mono 12" nil t)
+
+(use-package evil
+ :ensure t
+ :init
+ (setq evil-want-keybinding nil
+     evil-vsplit-window-right t
+     evil-vsplit-window-below t
+     evil-undo-system 'undo-redo)
+     (evil-mode))
+
+(use-package evil-collection
+    :ensure t
+    :after evil
+    :config
+    (add-to-list 'evil-collection-mode-list 'help)
+    (evil-collection-init))
+
+;;(load-theme 'modus-vivendi t)
+  ;;(use-package nordic-night-theme
+  ;;    :ensure t
+  ;;    :config
+  ;;    (load-theme 'nordic-night t))
+
+  (use-package nord-theme
+      :ensure t
+      :config
+      (load-theme 'nord t))
 
 (require 'general)
 (use-package general
@@ -105,3 +127,8 @@
 	  which-key-separator " → " ))
 
 (use-package magit)
+
+(use-package toc-org
+:ensure t
+:commands toc-org-enable
+:init (add-hook 'org-mode-hook 'toc-org-enable))
