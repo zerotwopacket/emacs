@@ -7,3 +7,6 @@ org-roam.db
 projectile-bookmarks.eld
 recentf
 eshell/history
+cache/
+transient/
+url/
