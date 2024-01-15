@@ -1,21 +1,21 @@
-(require 'package)
-(add-to-list 'package-archives
-                '("melpa" . "https://melpa.org/packages/"))
+;;(require 'package)
+;;(add-to-list 'package-archives
+ ;;               '("melpa" . "https://melpa.org/packages/"))
 
-(setq package-list
-        '(evil general ivy counsel ivy-rich
-        org-bullets projectile which-key
-        magit))
+;;(setq package-list
+ ;;       '(evil general ivy counsel ivy-rich
+  ;;      org-bullets projectile which-key
+   ;;     magit web-mode))
 
-(dolist (package package-list)
-    (unless (package-installed-p package)
-    (package-install package)))
+;;(dolist (package package-list)
+ ;;   (unless (package-installed-p package)
+  ;;  (package-install package)))
 
 (column-number-mode)
-(global-display-line-numbers-mode 1)
 (setq visible-bell 1);
+(setq display-line-numbers 'relative)
 
-(set-frame-font "MesloLGS Nerd Font Mono 12" nil t)
+(set-frame-font "MesloLGS Nerd Font Mono 16" nil t)
 
 (use-package evil
  :ensure t
@@ -33,16 +33,10 @@
     (add-to-list 'evil-collection-mode-list 'help)
     (evil-collection-init))
 
-;;(load-theme 'modus-vivendi t)
-  ;;(use-package nordic-night-theme
-  ;;    :ensure t
-  ;;    :config
-  ;;    (load-theme 'nordic-night t))
-
-  (use-package nord-theme
-      :ensure t
-      :config
-      (load-theme 'nord t))
+(use-package nord-theme
+    :ensure t
+    :config
+    (load-theme 'nord t))
 
 (require 'general)
 (use-package general
@@ -65,6 +59,11 @@
 
   (ztp/leader-keys
       "p" '(projectile-command-map :wk "Projectile"))
+
+  (ztp/leader-keys
+      "o" '(:ignore t :wk "Org")
+      "o c" '(org-capture :wk "org-capture")
+      "o a" '(org-agenda :wk "org-agenda"))
 
   (ztp/leader-keys
       "g" '(:ignore t :wk "Git")    
@@ -132,3 +131,45 @@
 :ensure t
 :commands toc-org-enable
 :init (add-hook 'org-mode-hook 'toc-org-enable))
+
+(use-package company
+:diminish company-mode
+:custom
+(company-idle-delay 0)
+(company-minimum-prefix-length 1)
+(company-tooltip-align-annotations t)
+:bind
+(:map company-active-map
+  ("RET" . nil)
+  ("[return]" . nil)
+  ("TAB" . company-complete-selection)
+  ("<tab>" . company-complete-selection)
+  ("C-n" . company-select-next)
+  ("C-p" . company-select-previous))
+:init (setq company-backends '(company-capf
+                      company-elisp
+                      company-cmake
+                      company-yasnippet
+                      company-files
+                      company-keywords
+                      company-etags
+                      company-gtags
+                      company-ispell)))
+
+;;(use-package eglot
+    ;;:defer t
+    ;;:hook
+    ;;(html-mode . ,(eglot-alternatives '(("vscode-html-language-server --stdio"))))
+ ;;   (css-mode . eglot-ensure)
+  ;;  (js-mode . eglot-ensure)
+  ;;)
+
+(with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+    '(html-mode . ("vscode-html-language-server
+vscode-html-language-server"))))
+
+(setq org-capture-templates
+      '(("b" "Templates for marking stuff to buy" checkitem
+            (file+headline "~/org/buylist.org" "Buy")
+            "- [ ] %?")))
