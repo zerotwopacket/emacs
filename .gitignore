@@ -12,3 +12,5 @@ transient/
 url/
 projects/
 projects
+.cache/
+.lsp**/**
