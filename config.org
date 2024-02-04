@@ -15,14 +15,10 @@
 - [[#projectile][Projectile]]
 - [[#which-key][Which-Key]]
 - [[#toc-enable][TOC enable]]
-- [[#company][Company]]
-- [[#flycheck][Flycheck]]
-- [[#lsp][LSP]]
-  - [[#setup][Setup]]
-- [[#eglot][Eglot]]
 - [[#org][Org]]
   - [[#org-capture-templates-based-on-manual][Org capture templates based on manual]]
-- [[#elpaca-manager][Elpaca Manager]]
+  - [[#agenda-settings][Agenda settings]]
+- [[#org-roam][Org-roam]]
 
 * Intall Packages
 
@@ -51,7 +47,8 @@
   (setq visible-bell 1);
   (setq display-line-numbers 'relative)
 
-  (set-frame-font "MesloLGS Nerd Font Mono 16" nil t)
+;;  (set-frame-font "MesloLGS Nerd Font Mono 18" nil t)
+  (set-frame-font "IntoneMono Nerd Font Mono 18" nil t)
 
 #+end_src
 
@@ -81,10 +78,15 @@
 
 #+begin_src emacs-lisp
 
-    (use-package nord-theme
-        :ensure t
-        :config
-        (load-theme 'nord t))
+  ;;(use-package nord-theme
+   ;;   :ensure t
+    ;;  :config
+     ;; (load-theme 'nord t))
+
+  (use-package gruvbox-theme
+      :ensure t
+      :config
+      (load-theme 'gruvbox t))
 
 #+end_src
 
@@ -141,7 +143,6 @@
         "g s" '(magit-stage-file :wk "Git stage file")
         "g t" '(git-timemachine :wk "Git time machine")
         "g u" '(magit-stage-file :wk "Git unstage file"))
-
   )
 #+end_src
 
@@ -222,83 +223,6 @@
 
 #+end_src
 
-* Company
-
-#+BEGIN_SRC emacs-lisp
-
-      (use-package company
-      :diminish company-mode
-      :custom
-      (company-idle-delay 0)
-      (company-minimum-prefix-length 1)
-      (company-tooltip-align-annotations t)
-      :bind
-      (:map company-active-map
-        ("RET" . nil)
-        ("[return]" . nil)
-        ("TAB" . company-complete-selection)
-        ("<tab>" . company-complete-selection)
-        ("C-n" . company-select-next)
-        ("C-p" . company-select-previous))
-      :init (setq company-backends '(company-capf
-                            company-elisp
-                            company-cmake
-                            company-yasnippet
-                            company-files
-                            company-keywords
-                            company-etags
-                            company-gtags
-                            company-ispell)))
-#+END_SRC
-
-* Flycheck
-
-
-
-* LSP
-** Setup
-
-;;#+begin_src emacs-lisp
-
-  (use-package lsp-mode
-      :ensure t
-      :init
-          (setq lsp-keymap-prefix "C-c l")
-      :hook 
-          (html-mode . lsp-deferred)
-          (lsp-mode . lsp-enable-which-key-integration)
-      :commands (lsp lsp-deferred))
-
-  (setq-default tab-width 4)
-  (setq-default indent-tabs-mode nil)
-
-  (use-package web-mode
-    :mode "\\.html?\\'"
-    :hook ((web-mode . (lambda ()
-                (when (require 'lsp-html nil t)(lsp))))
-           ))
-
-;;#+end_src
-
-
-* Eglot
-#+BEGIN_SRC emacs-lisp
-
-      ;;(use-package eglot
-      ;;:defer t
-      ;;:hook
-      ;;(html-mode . ,(eglot-alternatives '(("vscode-html-language-server --stdio"))))
-   ;;   (css-mode . eglot-ensure)
-    ;;  (js-mode . eglot-ensure)
-    ;;)
-
-  (with-eval-after-load 'eglot
-      (add-to-list 'eglot-server-programs
-      '(html-mode . ("vscode-html-language-server
-  vscode-html-language-server"))))
-
-#+END_SRC
-
 * Org
 
 ** Org capture templates based on [[https://orgmode.org/orgguide.html#Capture][manual]]
@@ -306,10 +230,41 @@
 #+begin_src emacs-lisp
 
 (setq org-capture-templates
-      '(("b" "Templates for marking stuff to buy" checkitem
-            (file+headline "~/org/buylist.org" "Buy")
-            "- [ ] %?")))
+    '(("b" "Templates for marking stuff to buy" checkitem
+        (file+headline "~/org/buylist.org" "Buy")
+        "- [ ] %?")
+    ("t" "Todo" entry
+        (file+headline "~/org/inbox.org" "Todos")
+        "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+    ("s" "Sprint" entry
+                (file+headline "~/org/inbox.org" "Sprint")
+                "* TODO Review %^{Person waiting}")
+  ))
 
 #+end_src
 
-* TODO Elpaca Manager
+
+** Agenda settings
+
+#+begin_src emacs-lisp
+
+  (setq org-directory "~/org")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-agenda-files '("~/org"))
+  (setq org-refile-use-outline-path t)
+  (setq org-outline-path-complete-in-steps nil)
+
+  (setq org-refile-targets '((nil :maxlevel . 3)
+      (org-agenda-files :maxlevel . 3)))
+
+  ;;(setq org-refile-targets
+  ;;      '(("projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")))
+#+end_src
+
+* Org-roam
+
+#+BEGIN_SRC emacs-lisp
+  ;;(make-directory "~/org-roam")
+  (setq org-roam-directory (file-truename "~/org-roam"))
+  (org-roam-db-autosync-mode)
+#+END_SRC
